@@ -1,0 +1,61 @@
+\documentclass{article}
+\title{Dissecting Android Malware}
+\author{Surya Valluri}
+\date{02/07/2015}
+\begin{document}
+\maketitle
+In the recent years, there has been a rapid growth in smartphones market with which majority of them having android based operating systems in them. Along with the market android also shares the highest share in mobile malware of 46\% and still counting, keeping these number in mind it clearly shows that we need to strengthen the defense system. So that highest share in the market should be an advantage in getting better services, not to get exploited in terms of security.
+
+This paper aims to cover three aspects: \\
+1. Collecting and tabulating all types of android malware samples and categorizing them into different families. \\
+2. Based on the analysis we will characterize them based on their life cycle in the application.\\
+3. Keeping the present scenario, we show that existing solutions for malware attacks are lagging.\\
+
+\begin{center}
+\begin{tabular}{ |p{3cm}||p{3cm}| }
+\hline
+Malware & Count of bugs out of 1260 \\ 
+\hline
+DroidKungFu3 & 309 \\ 
+\hline
+AnserverBot & 187 \\ 
+\hline
+BaseBridge & 122\\
+\hline
+DroidKungFu4 & 96\\
+\hline
+\end{tabular}
+\end{center}
+
+
+2. Malware characterization and installation:\\
+Let's take a closer look at how does malware enters the system and they are three major types of intrusions:\\
+a. Repacking: Once the application is released in the market, malware authors disassemble them add their malicious stuff and assemble as it is and upload in the market with such a signature which makes it appear that it is legitimate and a genuine release by the organization.\\
+b. Update Attack: Once the user started using the application, he doesn't use the same version throughout and definitely he would go for an update.Malware authors make sure they added a malicious payload in the update and make it available for the users, opting for an update user is targeted without his knowledge.\\
+c. Drive-by Download: Malware authors advertise their apps in such a way that it shows some feature rich application which lures users to download and install them. A normal user can't figure out if the application has such unreliable stuff and there are chances that he can be easily attacked.\\
+
+Installation: Once the malicious payload enters the host system through the app it might be installed in two ways. Once the app is running the malware payload triggers its events and attacks the system or it triggers the bootstrap before the host application is launched.\\
+
+Malicious payload attacks system in different forms and the famous forms of payloads take in control of user privileges escalation, remote control and financial charge. There are some more active payloads which also collect user information and also sensitive bank information.\\
+
+3.Present Scenario: Such a rapid growth in malware and its criticality challenges many system security organizations regarding their effectiveness. To test the malware detection we selected four different system security software's(AVG\\,Lookout,Norton and TrendMicro) and before installing each of them on a phone we have exposed it with a virus database. Then we installed security software's and tried detecting the malware. \\
+
+\begin{center}
+\begin{tabular}{ |p{3cm}||p{3cm}| }
+\hline
+Security Software & Detected Sample Percentage \\ 
+\hline
+AVG & 54.7\%  \\ 
+\hline
+Lookout & 79.6\%  \\ 
+\hline
+Norton & 20.2\% \\
+\hline
+TrendMicro & 76.7\% \\
+\hline
+\end{tabular}
+\end{center}
+
+
+The statistics above show that each software has a different design and implementation in scanning malware, but none does the purpose solely. Which shows that security software's have to update their approach in designing and finding viruses on the system.\\
+\end{document}
