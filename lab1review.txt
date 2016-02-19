@@ -1,0 +1,18 @@
+10 pts
+
+Summary:
+
+- Good quality overall. Good work!
+
+
+\LaTeX:
+
+- When using tables, try to keep the \hline inline with the \\ to save row
+  space.
+
+- The usage of tables is incomplete. Usually tables have a caption that
+  describes the content of the table. 
+
+- Dr. Rivas
+
+
