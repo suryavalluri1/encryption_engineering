@@ -1,5 +1,5 @@
 
-public class aes {
+public class aescipher {
 
 
 
@@ -42,6 +42,22 @@ public class aes {
 	private static String[][] masterKey = new String[4][4];
 
 	public static String[][] keyMatrix_W = new String[4][44];
+	
+	public static void processInput(String key)
+	{
+		
+		int i =0;
+		for (int column = 0; column < 4; column++) {			
+		for (int row = 0; row < 4; row = row + 1) {
+				masterKey[row][column] = key.substring(i,i+2);
+				i=i+2;
+			}
+		}
+		generateWMatrix();
+		
+		
+		
+	}
 
 	public static void generateWMatrix() 
 	{
@@ -60,16 +76,55 @@ public class aes {
 				}
 			} else {
 			
-				/*
-				building new vector
-				shifting cells
-				sbox , rcon replacements
-				*/
+				
+				w_new = new String[1][4];
+
+				w_new[0][0] = keyMatrix_W[0][column - 1];
+				w_new[0][1] = keyMatrix_W[1][column - 1];
+				w_new[0][2] = keyMatrix_W[2][column - 1];
+				w_new[0][3] = keyMatrix_W[3][column - 1];
+				
+				
+				w_new[0][0] = keyMatrix_W[1][column - 1];
+				w_new[0][1] = keyMatrix_W[2][column - 1];
+				w_new[0][2] = keyMatrix_W[3][column - 1];
+				w_new[0][3] = keyMatrix_W[0][column - 1];
+				
+				
+				for(int i =0 ; i<1;i++){
+					for(int j =0;j<4 ; j++){
+						w_new[i][j] = aesSbox(w_new[i][j]);
+					}
+				}
+				int r = column/4;
+				w_new[0][0] = exclusiveOR(aesRcon(r),w_new[0][0] );
+				for (int row = 0; row < 4; row++) {
+					keyMatrix_W[row][column] = exclusiveOR(keyMatrix_W[row][column - 4], w_new[0][row]);
+				}
+					
+				}
+
+				
+
 			
 			}
+		int count = 0;
+		int b=0;
+		while(count<11)
+		{
+		for(int colCounter = 0 ; colCounter<4;b++, colCounter ++){
+		 for(int a = 0;a< 4 ; a++){	
+				System.out.print(keyMatrix_W[a][b]);
+			}
+		}
+		System.out.println("");
+		count++;
+		}
+		//System.out.println(keyMatrix_W);
+		
 		}
 
-	}
+	
 	private static String exclusiveOR(String val1, String val2) 
 	{
 
@@ -80,6 +135,29 @@ public class aes {
         String hexResult = Integer.toHexString(exclusiveOutput);
 		return hexResult.length() == 1 ? ("0" + hexResult) : hexResult;
 
+	}
+	
+	
+	
+	private static String aesSbox(String sBoxInput) 
+	{
+
+		
+		int firstDigitInt = Integer.parseInt(sBoxInput.split("")[0],16);
+		int secondDigitInt = Integer.parseInt(sBoxInput.split("")[1],16);
+		
+		String sboxOutput = S_BOX[firstDigitInt][secondDigitInt];
+		return sboxOutput;
+
+	}
+	private static String aesRcon(int rConInput) 
+	{
+
+		
+		String rConOutput = R_CON[0][rConInput];
+		return rConOutput;
+
+		
 	}
 
 }
