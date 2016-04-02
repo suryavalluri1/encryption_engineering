@@ -19,7 +19,7 @@ public class Driver {
     if (sc.hasNextLine())
       plaintext = sc.nextLine();
     Aescipher as = new Aescipher();
-    Aescipher.processInput(inputkey, plaintext);
+    Aescipher.aes(inputkey, plaintext);
 
   }
 

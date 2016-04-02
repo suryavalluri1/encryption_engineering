@@ -84,7 +84,8 @@ public class Aescipher {
       { "61", "C2", "9F", "25", "4A", "94", "33", "66", "CC", "83", "1D", "3A",
           "74", "E8", "CB", "8D" } };
 
-  // masterKey array is declared to save the key user gives
+  // masterKey array is declared to save the key and masterText for the text
+  // user gives
   private static String[][] masterKey = new String[4][4];
   private static String[][] masterText = new String[4][4];
 
@@ -121,7 +122,8 @@ public class Aescipher {
         j = j + 2;
       }
     }
-
+    // Takes 4 keys at a time and performs the aes operations till round reaches
+    // 10 count
     String[][] keyHex = new String[4][4];
     int WCol = 0;
     int roundCounter = 0;
@@ -142,6 +144,7 @@ public class Aescipher {
         if (roundCounter != 10)
           masterText = aesMixColumn(masterText);
       } else
+        // In the tenth round we do only plain xor
         masterText = aesStateXor(masterText, keyHex);
     }
     for (int cols = 0; cols < 4; cols++) {
@@ -150,8 +153,6 @@ public class Aescipher {
       }
     }
   }
-
-
 
   /**
    * generateWMatrix() method starts processing the keys for the 4*44 keys
@@ -233,18 +234,13 @@ public class Aescipher {
    * @return
    */
   public static String[][] aesStateXor(String[][] sHex, String[][] keyHex) {
-    // String S_BOX[][] , String keyMatrixW[][]
-    // String
-    // arr1[][]={{"54","4F","4E","20"},{"77","6E","69","54"},{"6F","65","6E","77"},{"20","20","65","6F"}};
-    // String
-    // arr2[][]={{"54","73","20","67"},{"68","20","4B","20"},{"61","6D","75","46"},{"74","79","6E","75"}};
-    String arr3[][] = new String[4][4];
+    String exclusiveOrArray[][] = new String[4][4];
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
-        arr3[i][j] = exclusiveOr(sHex[i][j], keyHex[i][j]);
+        exclusiveOrArray[i][j] = exclusiveOr(sHex[i][j], keyHex[i][j]);
       }
     }
-    return arr3;
+    return exclusiveOrArray;
 
   }
 
@@ -329,9 +325,9 @@ public class Aescipher {
   protected static String multiply2(String InputHex) {
     // String Input = InputHex.length() < 8 ? ("0" + InputHex) : InputHex;
     InputHex = Integer.toBinaryString(Integer.parseInt(InputHex, 16));
-    int len = 8 - (InputHex.length());
+    int lenthOfInput = 8 - (InputHex.length());
     String pads = new String();
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < lenthOfInput; i++) {
       pads += "0";
     }
     String Input = pads.concat(InputHex);
@@ -376,13 +372,17 @@ public class Aescipher {
         for (int k = 0; k < 4; k++) {
 
           switch (GaloisMatrix[i][k]) {
+          // checks data from galios matrix and verifies data to perform
+          // multiplication
           case "01":
             sum = exclusiveOr(sum, inStateHex[k][j]);
             break;
           case "02":
+            // If its 02 then multiply2 function is called
             sum = exclusiveOr(sum, multiply2(inStateHex[k][j]));
             break;
           case "03":
+            // If its 02 then multiply3 function is called
             sum = exclusiveOr(sum, multiply3(inStateHex[k][j]));
             break;
           }
