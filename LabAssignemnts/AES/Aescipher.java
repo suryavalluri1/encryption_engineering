@@ -90,8 +90,9 @@ public class Aescipher {
 
   // keyMatrixW array is declared to save the key's which will be generated
   public static String[][] keyMatrixW = new String[4][44];
-  static String[][] GaloisMatrix = { { "2", "3", "1", "1" },
-      { "1", "2", "3", "1" }, { "1", "1", "2", "3" }, { "3", "1", "1", "2" } };
+  static String[][] GaloisMatrix = { { "02", "03", "01", "01" },
+      { "01", "02", "03", "01" }, { "01", "01", "02", "03" },
+      { "03", "01", "01", "02" } };
 
   /**
    * This method accepts user given key,plain text and saves it into a 4*4
@@ -119,6 +120,7 @@ public class Aescipher {
         j = j + 2;
       }
     }
+  //  String out[][] = new String;
     // Exclusive or is called
     String keys[][] = aesStateXor(masterText, keyMatrixW);
     // Exclusive or output is passed to nibble substitution is called
@@ -126,7 +128,7 @@ public class Aescipher {
     // Nibble substituted output is called to shiftrows method
     String shifts[][] = aesShiftRow(nibs);
     // Shifted output is sent to mixing columns function
-    int mixs[][] = aesMixColumn(shifts);
+    String mixs[][] = aesMixColumn(shifts);
     // public static String sHex[4][4] ;
     // System.out.print("this is 0th value in key matrxi "+keyMatrixW[1][1]);
     // System.out.print("this is 0th value in key matrxi "+S_BOX[][]);
@@ -303,6 +305,7 @@ public class Aescipher {
         System.out.print(outStateHex[i][j]);
       }
     }
+    System.out.println("");
     return outStateHex;
   }
 
@@ -348,22 +351,25 @@ public class Aescipher {
    */
   protected static String multiply2(String InputHex) {
     // String Input = InputHex.length() < 8 ? ("0" + InputHex) : InputHex;
+    InputHex = Integer.toBinaryString(Integer.parseInt(InputHex, 16));
     int len = 8 - (InputHex.length());
     String pads = new String();
     for (int i = 0; i < len; i++) {
       pads += "0";
     }
     String Input = pads.concat(InputHex);
-    int decimalValue1 = Integer.parseInt(Input, 16);
-    // String mostSignificantBit = Integer.toString(decimalValue1).substring(0);
-    // String hexResult = Integer.toHexString(decimalValue1);
-    String shifted = (Integer.toBinaryString(decimalValue1 << 1));
-    Integer Snum = Integer.parseInt(shifted, 16);
-    if (Integer.toString(decimalValue1).substring(0) != "1") {
-      return Integer.toString((Snum) ^ (0x1b));
-    } else
-      return Integer.toString(Snum);
+    String oneB = Integer.toHexString(27);
+    String shiftedBinary = Integer
+        .toBinaryString(Integer.parseInt(Input, 2) << 1);
+    if (shiftedBinary.length() > 8) {
+      shiftedBinary = shiftedBinary.substring(1);
+    }
+    String shifted = Integer.toHexString(Integer.parseInt(shiftedBinary, 2));
 
+    if (Input.substring(0, 1).equals("1")) {
+      return exclusiveOr(shifted, oneB);
+    } else
+      return shifted;
   }
 
   /**
@@ -374,9 +380,7 @@ public class Aescipher {
    * @return
    */
   protected static String multiply3(String InputHex) {
-    return Integer
-        .toString((Integer.parseInt(multiply2(InputHex), 16) ^ Integer
-            .parseInt(InputHex, 16)));
+    return exclusiveOr(multiply2(InputHex), InputHex);
   }
 
   /**
@@ -385,38 +389,42 @@ public class Aescipher {
    * @param inStateHex
    * @return
    */
-  protected static int[][] aesMixColumn(String[][] inStateHex) {
-    int sum;
+  protected static String[][] aesMixColumn(String[][] inStateHex) {
+    String sum;
     /*
      * String inStateHex[][] = { { "63", "EB", "9F", "A0" }, { "2F", "93", "92",
      * "C0" }, { "AF", "C7", "AB", "30" }, { "A2", "20", "CB", "2B" } };
      */
-    int Product[][] = new int[4][4];
+    String Product[][] = new String[4][4];
+
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
-        sum = 0;
+        sum = "0";
         for (int k = 0; k < 4; k++) {
+
           switch (GaloisMatrix[i][k]) {
-          case "1":
-            sum = sum ^ Integer.parseInt(inStateHex[k][j], 16);
+          case "01":
+            sum = exclusiveOr(sum, inStateHex[k][j]);
             break;
-          case "2":
-            sum = sum ^ Integer.parseInt(multiply2(inStateHex[k][j]));
+          case "02":
+            sum = exclusiveOr(sum, multiply2(inStateHex[k][j]));
+            // System.out.print("02"+sum);
             break;
-          case "3":
-            sum = sum ^ Integer.parseInt(multiply3(inStateHex[k][j]));
+          case "03":
+            sum = exclusiveOr(sum, multiply3(inStateHex[k][j]));
             break;
           }
         }
+
         Product[i][j] = sum;
-        System.out.print(Product[i][j]);
       }
     }
 
     for (int a = 0; a < 4; a++) {
       for (int b = 0; b < 4; b++) {
-        System.out.print(Product[a][b]);
+        System.out.print(Product[a][b] + "\t");
       }
+      System.out.println();
     }
     return Product;
   }
