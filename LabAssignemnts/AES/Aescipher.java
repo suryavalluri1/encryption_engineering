@@ -102,7 +102,7 @@ public class Aescipher {
    * @param plaintext
    * */
 
-  public static void processInput(String key, String plaintext) {
+  public static void aes(String key, String plaintext) {
 
     int i = 0;
     int j = 0;
@@ -112,6 +112,7 @@ public class Aescipher {
         i = i + 2;
       }
     }
+
     // Calls the function to generate key schedule
     generateWMatrix();
     for (int column = 0; column < 4; column++) {
@@ -120,19 +121,37 @@ public class Aescipher {
         j = j + 2;
       }
     }
-  //  String out[][] = new String;
-    // Exclusive or is called
-    String keys[][] = aesStateXor(masterText, keyMatrixW);
-    // Exclusive or output is passed to nibble substitution is called
-    String nibs[][] = aesNibbleSub(keys);
-    // Nibble substituted output is called to shiftrows method
-    String shifts[][] = aesShiftRow(nibs);
-    // Shifted output is sent to mixing columns function
-    String mixs[][] = aesMixColumn(shifts);
-    // public static String sHex[4][4] ;
-    // System.out.print("this is 0th value in key matrxi "+keyMatrixW[1][1]);
-    // System.out.print("this is 0th value in key matrxi "+S_BOX[][]);
+
+    String[][] keyHex = new String[4][4];
+    int WCol = 0;
+    int roundCounter = 0;
+    while (WCol < 44) {
+      for (int cols = 0; cols < 4; cols++, WCol++) {
+        for (int row = 0; row < 4; row++) {
+          keyHex[row][cols] = keyMatrixW[row][WCol];
+        }
+      }
+      if (roundCounter != 10) {
+        roundCounter++;
+        masterText = aesStateXor(masterText, keyHex);
+        // Exclusive or output is passed to nibble substitution is called
+        masterText = aesNibbleSub(masterText);
+        // Nibble substituted output is called to shiftrows method
+        masterText = aesShiftRow(masterText);
+        // Shifted output is sent to mixing columns function
+        if (roundCounter != 10)
+          masterText = aesMixColumn(masterText);
+      } else
+        masterText = aesStateXor(masterText, keyHex);
+    }
+    for (int cols = 0; cols < 4; cols++) {
+      for (int row = 0; row < 4; row++) {
+        System.out.print(masterText[row][cols]);
+      }
+    }
   }
+
+
 
   /**
    * generateWMatrix() method starts processing the keys for the 4*44 keys
@@ -183,20 +202,6 @@ public class Aescipher {
         }
       }
     }
-    int iterationCounter = 0;
-    int b = 0;
-    while (iterationCounter < 11) {
-      // keyMatrixW is filled all proper keys we are displaying all the values
-      for (int colCounter = 0; colCounter < 4; b++, colCounter++) {
-        for (int a = 0; a < 4; a++) {
-          System.out.print(keyMatrixW[a][b]);
-        }
-      }
-
-      System.out.println("");
-      iterationCounter++;
-    }
-
   }
 
   /**
@@ -234,20 +239,9 @@ public class Aescipher {
     // String
     // arr2[][]={{"54","73","20","67"},{"68","20","4B","20"},{"61","6D","75","46"},{"74","79","6E","75"}};
     String arr3[][] = new String[4][4];
-    String Hex;
-    String kyHex;
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
-        Hex = sHex[i][j];
-        kyHex = keyHex[i][j];
-        arr3[i][j] = exclusiveOr(Hex, kyHex);
-      }
-    }
-    System.out.println("The output of Exclusive OR is");
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-
-        System.out.print(arr3[i][j]);
+        arr3[i][j] = exclusiveOr(sHex[i][j], keyHex[i][j]);
       }
     }
     return arr3;
@@ -265,15 +259,6 @@ public class Aescipher {
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
         sBoxValues[i][j] = aesSbox(exclusive[i][j]);
-      }
-    }
-    System.out.println("");
-    System.out.println("The output of nibble substitution is");
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-
-        System.out.println("sbox values of i" + i + "j " + j + "s box value "
-            + sBoxValues[i][j]);
       }
     }
     return sBoxValues;
@@ -298,14 +283,6 @@ public class Aescipher {
       }
       counter--;
     }
-    System.out.print("The output of shifting rows is");
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-
-        System.out.print(outStateHex[i][j]);
-      }
-    }
-    System.out.println("");
     return outStateHex;
   }
 
@@ -391,10 +368,6 @@ public class Aescipher {
    */
   protected static String[][] aesMixColumn(String[][] inStateHex) {
     String sum;
-    /*
-     * String inStateHex[][] = { { "63", "EB", "9F", "A0" }, { "2F", "93", "92",
-     * "C0" }, { "AF", "C7", "AB", "30" }, { "A2", "20", "CB", "2B" } };
-     */
     String Product[][] = new String[4][4];
 
     for (int i = 0; i < 4; i++) {
@@ -408,7 +381,6 @@ public class Aescipher {
             break;
           case "02":
             sum = exclusiveOr(sum, multiply2(inStateHex[k][j]));
-            // System.out.print("02"+sum);
             break;
           case "03":
             sum = exclusiveOr(sum, multiply3(inStateHex[k][j]));
@@ -418,13 +390,6 @@ public class Aescipher {
 
         Product[i][j] = sum;
       }
-    }
-
-    for (int a = 0; a < 4; a++) {
-      for (int b = 0; b < 4; b++) {
-        System.out.print(Product[a][b] + "\t");
-      }
-      System.out.println();
     }
     return Product;
   }
