@@ -1,3 +1,13 @@
+/**
+ * File: Aescipher.java
+ * 
+ * @author Surya Valluri,Sri Immadisetty It accepts user input, key and encrypts
+ *         to a cipher
+ *
+ */
+
+
+
 public class Aescipher {
 
   /**
@@ -78,14 +88,13 @@ public class Aescipher {
           "74", "E8", "CB", "8D" } };
 
   static String[][] GaloisMatrix = { { "02", "03", "01", "01" },
-    { "01", "02", "03", "01" }, { "01", "01", "02", "03" },
-    { "03", "01", "01", "02" } };
+      { "01", "02", "03", "01" }, { "01", "01", "02", "03" },
+      { "03", "01", "01", "02" } };
   // masterKey array is declared to save the key user gives
-  public static String[][] masterKey;
-  public static String[][] masterText;
+  public static String[][] masterKey_encrypt;
+  public static String[][] masterText_encrypt;
   // keyMatrixW array is declared to save the key's which will be generated
-  public static String[][] keyMatrixW;
-
+  public static String[][] keyMatrixW_encrypt;
 
   /**
    * This method accepts user given key and saves it into a 4*4 matrix. Once the
@@ -94,29 +103,30 @@ public class Aescipher {
    * @param key
    *          : Input key
    */
-  public static void processInput(String plainText,String inputKey, int[] size_basket) {
+  public static void processInput(String plainText, String inputKey,
+      int[] size_basket) {
 
     int i = 0;
-    int j =0;
+    int j = 0;
     int col_valueforInput;
     int column_size;
     int rounds;
     col_valueforInput = size_basket[0];
     column_size = size_basket[1];
     rounds = size_basket[2];
-    keyMatrixW = new String[4][column_size];
-    masterKey = new String[4][col_valueforInput];
-    masterText = new String[4][4];
+    keyMatrixW_encrypt = new String[4][column_size];
+    masterKey_encrypt = new String[4][col_valueforInput];
+    masterText_encrypt = new String[4][4];
     for (int column = 0; column < col_valueforInput; column++) {
       for (int row = 0; row < 4; row = row + 1) {
-        masterKey[row][column] = inputKey.substring(i, i + 2);
+        masterKey_encrypt[row][column] = inputKey.substring(i, i + 2);
         i = i + 2;
       }
     }
 
     for (int column = 0; column < 4; column++) {
       for (int row = 0; row < 4; row = row + 1) {
-        masterText[row][column] = plainText.substring(j, j + 2);
+        masterText_encrypt[row][column] = plainText.substring(j, j + 2);
         j = j + 2;
       }
     }
@@ -124,62 +134,61 @@ public class Aescipher {
     System.out.println(column_size);
     System.out.println(rounds);
     generateWMatrix(col_valueforInput, column_size, rounds);
-    //generateCipher(masterKey,masterText,column_size,row_size,rounds);
+    // generateCipher(masterKey,masterText,column_size,row_size,rounds);
   }
-  
-  
-  
-    public static void generateCipher(String[][]masterKey ,String[][]masterText ,int column_size,int row_size,int rounds) {
-    
+
+  public static void generateCipher(String[][] masterKey,
+      String[][] masterText, int column_size, int row_size, int rounds) {
+
     String[][] keyHex = new String[4][4];
     int WCol = 0;
 
     int roundCounter = 0;
     while (WCol < column_size) {
-    //while (WCol < column_size) {
+      // while (WCol < column_size) {
       for (int cols = 0; cols < 4; cols++, WCol++) {
         for (int row = 0; row < 4; row++) {
-          keyHex[row][cols] = keyMatrixW[row][WCol];
+          keyHex[row][cols] = keyMatrixW_encrypt[row][WCol];
         }
       }
-    
-    if (roundCounter != (rounds-1)) {
-      roundCounter++;
-      masterText = aesStateXor(masterText, keyHex);
-      // Exclusive or output is passed to nibble substitution is called
-      masterText = aesNibbleSub(masterText);
-      // Nibble substituted output is called to shiftrows method
-      masterText = aesShiftRow(masterText);
-      // Shifted output is sent to mixing columns function
-      if (roundCounter != (rounds-1)){
-        masterText = aesMixColumn(masterText);
-            }
-        
-    } else
-      // In the tenth round we do only plain xor
-      masterText = aesStateXor(masterText, keyHex);
-  }
-  for (int cols = 0; cols < 4; cols++) {
-    for (int row = 0; row < 4; row++) {
-      System.out.print(masterText[row][cols]);
+
+      if (roundCounter != (rounds - 1)) {
+        roundCounter++;
+        masterText = aesStateXor(masterText, keyHex);
+        // Exclusive or output is passed to nibble substitution is called
+        masterText = aesNibbleSub(masterText);
+        // Nibble substituted output is called to shiftrows method
+        masterText = aesShiftRow(masterText);
+        // Shifted output is sent to mixing columns function
+        if (roundCounter != (rounds - 1)) {
+          masterText = aesMixColumn(masterText);
+        }
+
+      } else
+        // In the tenth round we do only plain xor
+        masterText = aesStateXor(masterText, keyHex);
+    }
+    for (int cols = 0; cols < 4; cols++) {
+      for (int row = 0; row < 4; row++) {
+        System.out.print(masterText[row][cols]);
+      }
     }
   }
-    }
-    
-  
 
   /**
    * generateWMatrix() method starts processing the keys for the 4*44 keys
    * matrix
    */
-    public static void generateWMatrix(int col_valueforInput, int column_size, int rounds) {   // Saving the user key in keyMatrixW by filling the first 4*4 cells
+  public static void generateWMatrix(int col_valueforInput, int column_size,
+      int rounds) { // Saving the user key in keyMatrixW by filling the first
+                    // 4*4 cells
     int roundCounter = 0;
     for (int row = 0; row < 4; row = row + 1) {
       for (int column = 0; column < col_valueforInput; column++) {
-        keyMatrixW[row][column] = masterKey[row][column];
+        keyMatrixW_encrypt[row][column] = masterKey_encrypt[row][column];
       }
     }
-    
+
     // Processing the rest keys for keyMatrixW , by taking an intermediate
     // matrix wNewMatrix for processing purpose
     String[][] wNewMatrix = null;
@@ -188,40 +197,41 @@ public class Aescipher {
        * if the column number is not a multiple of 4 the following steps are to
        * be implemented
        */
-          
-      if (column % col_valueforInput != 0 && col_valueforInput==8) {
+
+      if (column % col_valueforInput != 0 && col_valueforInput == 8) {
         if (column % 4 == 0) {
           for (int row = 0; row < 4; row++) {
-            keyMatrixW[row][column] = aesSbox(keyMatrixW[row][column - 1]);
-            keyMatrixW[row][column] = exclusiveOr(keyMatrixW[row][column
-                - col_valueforInput], keyMatrixW[row][column]);
+            keyMatrixW_encrypt[row][column] = aesSbox(keyMatrixW_encrypt[row][column - 1]);
+            keyMatrixW_encrypt[row][column] = exclusiveOr(
+                keyMatrixW_encrypt[row][column - col_valueforInput],
+                keyMatrixW_encrypt[row][column]);
 
           }
         } else {
           for (int row = 0; row < 4; row++) {
 
-            keyMatrixW[row][column] = exclusiveOr(keyMatrixW[row][column
-                - col_valueforInput], keyMatrixW[row][column - 1]);
+            keyMatrixW_encrypt[row][column] = exclusiveOr(
+                keyMatrixW_encrypt[row][column - col_valueforInput],
+                keyMatrixW_encrypt[row][column - 1]);
           }
         }
-      }
-      else if (column % col_valueforInput != 0 && col_valueforInput!=8){
+      } else if (column % col_valueforInput != 0 && col_valueforInput != 8) {
         for (int row = 0; row < 4; row++) {
 
-          keyMatrixW[row][column] = exclusiveOr(keyMatrixW[row][column
-              - col_valueforInput], keyMatrixW[row][column - 1]);
+          keyMatrixW_encrypt[row][column] = exclusiveOr(
+              keyMatrixW_encrypt[row][column - col_valueforInput],
+              keyMatrixW_encrypt[row][column - 1]);
         }
-        
-      }
-      else if (column % col_valueforInput == 0) {
+
+      } else if (column % col_valueforInput == 0) {
 
         // If its a multiple of 4 the following steps will be implemented
         wNewMatrix = new String[1][4];
         // Inserting values and shifting cells in the intermediate matrix
-        wNewMatrix[0][0] = keyMatrixW[1][column - 1];
-        wNewMatrix[0][1] = keyMatrixW[2][column - 1];
-        wNewMatrix[0][2] = keyMatrixW[3][column - 1];
-        wNewMatrix[0][3] = keyMatrixW[0][column - 1];
+        wNewMatrix[0][0] = keyMatrixW_encrypt[1][column - 1];
+        wNewMatrix[0][1] = keyMatrixW_encrypt[2][column - 1];
+        wNewMatrix[0][2] = keyMatrixW_encrypt[3][column - 1];
+        wNewMatrix[0][3] = keyMatrixW_encrypt[0][column - 1];
         // Once the shifting is done we do the s-box transformation
         for (int i = 0; i < 1; i++) {
           for (int j = 0; j < 4; j++) {
@@ -233,8 +243,9 @@ public class Aescipher {
         wNewMatrix[0][0] = exclusiveOr(aesRcon(r), wNewMatrix[0][0]);
         // Final computation of recursively XOR the values
         for (int row = 0; row < 4; row++) {
-          keyMatrixW[row][column] = exclusiveOr(keyMatrixW[row][column
-              - col_valueforInput], wNewMatrix[0][row]);
+          keyMatrixW_encrypt[row][column] = exclusiveOr(
+              keyMatrixW_encrypt[row][column - col_valueforInput],
+              wNewMatrix[0][row]);
         }
       }
     }
@@ -244,18 +255,19 @@ public class Aescipher {
       // keyMatrixW is filled all proper keys we are displaying all the values
       for (int colCounter = 0; colCounter < 4; b++, colCounter++) {
         for (int a = 0; a < 4; a++) {
-          System.out.print(keyMatrixW[a][b]);
+          System.out.print(keyMatrixW_encrypt[a][b]);
         }
       }
       System.out.println("");
       iterationCounter++;
     }
-    System.out.println(masterText);
+    System.out.println(masterText_encrypt);
     System.out.println(column_size);
     System.out.println(col_valueforInput);
     System.out.println(rounds);
-    generateCipher(masterKey,masterText,column_size,col_valueforInput,rounds);
-      }
+    generateCipher(masterKey_encrypt, masterText_encrypt, column_size,
+        col_valueforInput, rounds);
+  }
 
   /**
    * This method takes two input strings which are hexadecimal values and
@@ -306,6 +318,7 @@ public class Aescipher {
     String rConOutput = R_CON[0][rConInput];
     return rConOutput;
   }
+
   public static String[][] aesStateXor(String[][] sHex, String[][] keyHex) {
     String exclusiveOrArray[][] = new String[4][4];
     for (int i = 0; i < 4; i++) {
@@ -323,6 +336,7 @@ public class Aescipher {
     return exclusiveOrArray;
 
   }
+
   /**
    * Accepts Exclusiveor output and finds the respective element in S_BOX matrix
    * 
@@ -338,6 +352,7 @@ public class Aescipher {
     }
     return sBoxValues;
   }
+
   /**
    * Once the S_BOX values are returned they are shifted
    * 
@@ -359,6 +374,7 @@ public class Aescipher {
     }
     return outStateHex;
   }
+
   protected static String[][] aesMixColumn(String[][] inStateHex) {
     String sum;
     String Product[][] = new String[4][4];
@@ -390,9 +406,10 @@ public class Aescipher {
     }
     return Product;
   }
+
   /**
-   * In this function , mix columns operations having multiplication with 3 are
-   * considered here and operation is performed.
+   * In this function , mix columns fexclyoperations having multiplication with
+   * 3 are considered here and operation is performed.
    * 
    * @param InputHex
    * @return
@@ -400,6 +417,7 @@ public class Aescipher {
   protected static String multiply3(String InputHex) {
     return exclusiveOr(multiply2(InputHex), InputHex);
   }
+
   /**
    * In Mix columns operation if the element is to be multiplied with 2, we will
    * use this function to perform the operation of checking most significant bit
