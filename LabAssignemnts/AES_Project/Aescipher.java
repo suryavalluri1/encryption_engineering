@@ -1,8 +1,8 @@
 /**
  * File: Aescipher.java
  * 
- * @author Surya Valluri,Sri Immadisetty It accepts user input, key and encrypts
- *         to a cipher
+ * @author Surya Valluri,Sri Immadisetty It accepts user input, key and decrypts
+ *         the cipher
  *
  */
 
@@ -130,9 +130,6 @@ public class Aescipher {
         j = j + 2;
       }
     }
-    System.out.println(col_valueforInput);
-    System.out.println(column_size);
-    System.out.println(rounds);
     generateWMatrix(col_valueforInput, column_size, rounds);
     // generateCipher(masterKey,masterText,column_size,row_size,rounds);
   }
@@ -168,10 +165,12 @@ public class Aescipher {
         // In the tenth round we do only plain xor
         masterText = aesStateXor(masterText, keyHex);
     }
+    System.out.println("The Cipher Text is");
     for (int cols = 0; cols < 4; cols++) {
       for (int row = 0; row < 4; row++) {
-        System.out.print(masterText[row][cols]);
+        System.out.print(masterText[row][cols]+ "\t");
       }
+      System.out.println();
     }
   }
 
@@ -249,22 +248,6 @@ public class Aescipher {
         }
       }
     }
-    int iterationCounter = 0;
-    int b = 0;
-    while (iterationCounter < rounds) {
-      // keyMatrixW is filled all proper keys we are displaying all the values
-      for (int colCounter = 0; colCounter < 4; b++, colCounter++) {
-        for (int a = 0; a < 4; a++) {
-          System.out.print(keyMatrixW_encrypt[a][b]);
-        }
-      }
-      System.out.println("");
-      iterationCounter++;
-    }
-    System.out.println(masterText_encrypt);
-    System.out.println(column_size);
-    System.out.println(col_valueforInput);
-    System.out.println(rounds);
     generateCipher(masterKey_encrypt, masterText_encrypt, column_size,
         col_valueforInput, rounds);
   }
@@ -326,13 +309,7 @@ public class Aescipher {
         exclusiveOrArray[i][j] = exclusiveOr(sHex[i][j], keyHex[i][j]);
       }
     }
-    System.out.println("StateXor");
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        System.out.print(exclusiveOrArray[i][j]);
-      }
-      System.out.println(" ");
-    }
+    
     return exclusiveOrArray;
 
   }

@@ -46,8 +46,8 @@ public class Driver {
     size_basket[1] = column_size;
     size_basket[2] = rounds;
 
-    // Aescipher.processInput(plainText,inputkey, size_basket);
-    Aesdecipher.processInput(plainText, inputkey, size_basket);
+     Aescipher.processInput(plainText,inputkey, size_basket);
+//    Aesdecipher.processInput(plainText, inputkey, size_basket);
 
   }
 
