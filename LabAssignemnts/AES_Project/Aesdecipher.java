@@ -292,7 +292,7 @@ public class Aesdecipher {
   /**
    * Preparing row,column sizes and number of decryption rounds based on inputs
    */
-  public static void matrixInformatins() {
+  public static void matrixInformations() {
     if (rowSize == 4) {
       columnSize = 44;
       rounds = 11;
@@ -308,7 +308,7 @@ public class Aesdecipher {
   }
 
   /**
-   * Computing Xor for two inputs and return
+   * Computing exclusive Or for two inputs and return
    * 
    * @param value1
    * @param value2
@@ -363,13 +363,11 @@ public class Aesdecipher {
   }
 
   /**
-   * This method is used for xor the cyper matrix and round key
+   * This method is used for exclusive-or the cipher matrix and round key
    * 
-   * @param sHex
-   *          passing parameter
+   * @param cHex
    * @param keyHex
-   *          passing parameter
-   * @return return the output of xor for the given input
+   * @return the output of xor for the given input
    */
   public static String[][] aesStateXor(String[][] cHex, String[][] keyHex) {
 
@@ -388,7 +386,7 @@ public class Aesdecipher {
    * This function does the shift operation of 2-D array
    * 
    * @param inStateHex
-   * @return returning the shiftMatrix
+   * @returns the shifted matrix
    */
   public static String[][] aesShiftRow(String[][] inStateHex) {
     String[][] shiftMatrix = new String[inStateHex.length][inStateHex[0].length];
@@ -396,11 +394,9 @@ public class Aesdecipher {
     for (int row = 0; row < 4; row++) {
       for (int column = 0; column < 4; column++) {
         shiftMatrix[row][column] = inStateHex[row][(column + count) % 4];
-
       }
       count--;
     }
-
     return shiftMatrix;
   }
 
@@ -408,8 +404,7 @@ public class Aesdecipher {
    * Matches the values from the inverse-Sbox table
    * 
    * @param inStateHex
-   *          passing parameter
-   * @return return inStateHex matrix
+   * @returns the respective values from inverse sbox matrix
    */
   public static String[][] aesNibbleSub(String[][] inStateHex) {
 
@@ -422,14 +417,13 @@ public class Aesdecipher {
     return inStateHex;
   }
 
-  /*
-   * mixColumnMultiplication
+  /**
+   * Accepts two integers and returns the multiplication result from the lookup
+   * tables
    * 
-   * The Multiplied result is passed to the mixColumnAddition method and xored
-   * to get the sum.
-   * 
-   * MixColumns step can be performed by multiplying a coordinate vector of four
-   * numbers in Rijndael's Galois field.
+   * @param a
+   * @param b
+   * @return
    */
   public static int mixColumnMultiplication(int a, int b) {
     if (a == 0x09) {
@@ -445,23 +439,19 @@ public class Aesdecipher {
   }
 
   /**
-   * mixColumnAddition
-   *
-   * This math is done in Rijndael's Galois field, the addition below is
-   * actually an exclusive or operation, and then multiplication
+   * The output of this method will perform the mix column operation of AES.
    * 
-   * inputs and output are 4 by 4 matrices of pairs of hex digits and will
-   * perform the Mix Column operation of AES to transform the input state into
-   * output state. Using multiplications in the Galois field.
-   * 
-   * Returns the added resultant matrix.
-   * 
+   * @param Key
+   * @param mixColumn
+   * @param i
+   * @param j
+   * @return
    */
-  public static String mixColumnAddition(String[][] Key, int[][] mixclmn,
+  public static String mixColumnAddition(String[][] Key, int[][] mixColumn,
       int i, int j) {
     int sum = 0;
     for (int k = 0; k < 4; k++) {
-      int a = mixclmn[i][k];
+      int a = mixColumn[i][k];
       int b = Integer.parseInt(Key[k][j], 16);
       sum = sum ^ mixColumnMultiplication(a, b);
     }
@@ -470,14 +460,10 @@ public class Aesdecipher {
   }
 
   /**
-   * aesMixColumn
-   *
-   * inputs and output are 4 by 4 matrices of pairs of hex digits and will
-   * perform the Mix Column operation of AES to transform the input state into
-   * output state. Using multiplications in the Galois field.
+   * Performs AES mix columns operation
    * 
-   * Returns the Matrix which is shifted.
-   * 
+   * @param Key
+   * @return
    */
   public static String[][] aesMixColumn(String[][] Key) {
     // try {
@@ -492,10 +478,9 @@ public class Aesdecipher {
   }
 
   /**
-   * passing the input hexadecimal key into 2D-array of keMatrix
+   * Accepts input string and produces a two dimensional array
    * 
    * @param KeyHex
-   *          input to the method
    */
   public static void aesRoundKeysDecrypt(String KeyHex) {
 
@@ -504,11 +489,6 @@ public class Aesdecipher {
       int count = 0;
       for (int column = 0; column < rowSize; column++) {
         for (int row = 0; row < 4; row++) {
-
-          /**
-           * Sepsrating two alphabtes and storing them each in array of element
-           */
-
           keyMatrix[row][column] = KeyHex.substring(count, count + 2);
           count = count + 2;
 
@@ -516,7 +496,6 @@ public class Aesdecipher {
 
       }
 
-      // calling computeMatrix to generate 4*44 matrix
       computingMatrix();
     } catch (Exception e) {
       System.out.println("aesRoundKeys" + e);
@@ -524,7 +503,9 @@ public class Aesdecipher {
   }
 
   /**
-   * Generating wMatrix which is used to generate round keys
+   * Generates round keys which are generated from the given key. In turn round
+   * keys are used in decrypting the message
+   * 
    */
   public static void computingMatrix() {
 
@@ -588,7 +569,7 @@ public class Aesdecipher {
   }
 
   /**
-   * generatin matrix
+   * generates matrix from a given string
    * 
    * @param text
    *          plaintext
@@ -613,21 +594,24 @@ public class Aesdecipher {
 
   }
 
+  static int loop;
+
   /**
-   * converts the input to cyper text
+   * Accepts input from diver class and passes the same to the class for further
+   * processing of data. Computes round keys for the passed input and triggers
+   * the decryption process by its function calls. Displays the decrypted text
+   * which is saved in keyMatrix array.
    * 
    * @param text
-   *          plain text
    * @param key
-   *          cyper key
+   * @param size_basket
    */
-  static int loop;
 
   public static void processInput(String text, String key, int[] size_basket) {
     // int inputLength = key.length() / 8;
     int inputLength = size_basket[0];
     rowSize = inputLength;
-    matrixInformatins();
+    matrixInformations();
     matrixCreation(text);
     aesRoundKeysDecrypt(key);
     String[][] keyMatrix = new String[4][4];
@@ -671,7 +655,8 @@ public class Aesdecipher {
   }
 
   /**
-   * calculates roundcalculations for 10 rounds
+   * Performs all the repetative calculations which are to be done while
+   * generated the aes transformation process
    * 
    * @param text
    *          plain text
@@ -690,9 +675,8 @@ public class Aesdecipher {
     input = aesStateXor(text, key);
 
     // Calls aesMixColumn method by passing parameter as input
-    // if (loop != 10) {
+
     input = aesMixColumn(input);
-    // }
     // Calls aesShiftRow method by passing parameter as input
     input = aesShiftRow(input);
 
