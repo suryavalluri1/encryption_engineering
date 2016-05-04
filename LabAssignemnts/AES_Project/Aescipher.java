@@ -6,8 +6,6 @@
  *
  */
 
-
-
 public class Aescipher {
 
   /**
@@ -15,38 +13,22 @@ public class Aescipher {
    * aesBox
    */
   private static final String[][] S_BOX = {
-      { "63", "7C", "77", "7B", "F2", "6B", "6F", "C5", "30", "01", "67", "2B",
-          "FE", "D7", "AB", "76" },
-      { "CA", "82", "C9", "7D", "FA", "59", "47", "F0", "AD", "D4", "A2", "AF",
-          "9C", "A4", "72", "C0" },
-      { "B7", "FD", "93", "26", "36", "3F", "F7", "CC", "34", "A5", "E5", "F1",
-          "71", "D8", "31", "15" },
-      { "04", "C7", "23", "C3", "18", "96", "05", "9A", "07", "12", "80", "E2",
-          "EB", "27", "B2", "75" },
-      { "09", "83", "2C", "1A", "1B", "6E", "5A", "A0", "52", "3B", "D6", "B3",
-          "29", "E3", "2F", "84" },
-      { "53", "D1", "00", "ED", "20", "FC", "B1", "5B", "6A", "CB", "BE", "39",
-          "4A", "4C", "58", "CF" },
-      { "D0", "EF", "AA", "FB", "43", "4D", "33", "85", "45", "F9", "02", "7F",
-          "50", "3C", "9F", "A8" },
-      { "51", "A3", "40", "8F", "92", "9D", "38", "F5", "BC", "B6", "DA", "21",
-          "10", "FF", "F3", "D2" },
-      { "CD", "0C", "13", "EC", "5F", "97", "44", "17", "C4", "A7", "7E", "3D",
-          "64", "5D", "19", "73" },
-      { "60", "81", "4F", "DC", "22", "2A", "90", "88", "46", "EE", "B8", "14",
-          "DE", "5E", "0B", "DB" },
-      { "E0", "32", "3A", "0A", "49", "06", "24", "5C", "C2", "D3", "AC", "62",
-          "91", "95", "E4", "79" },
-      { "E7", "C8", "37", "6D", "8D", "D5", "4E", "A9", "6C", "56", "F4", "EA",
-          "65", "7A", "AE", "08" },
-      { "BA", "78", "25", "2E", "1C", "A6", "B4", "C6", "E8", "DD", "74", "1F",
-          "4B", "BD", "8B", "8A" },
-      { "70", "3E", "B5", "66", "48", "03", "F6", "0E", "61", "35", "57", "B9",
-          "86", "C1", "1D", "9E" },
-      { "E1", "F8", "98", "11", "69", "D9", "8E", "94", "9B", "1E", "87", "E9",
-          "CE", "55", "28", "DF" },
-      { "8C", "A1", "89", "0D", "BF", "E6", "42", "68", "41", "99", "2D", "0F",
-          "B0", "54", "BB", "16" } };
+      { "63", "7C", "77", "7B", "F2", "6B", "6F", "C5", "30", "01", "67", "2B", "FE", "D7", "AB", "76" },
+      { "CA", "82", "C9", "7D", "FA", "59", "47", "F0", "AD", "D4", "A2", "AF", "9C", "A4", "72", "C0" },
+      { "B7", "FD", "93", "26", "36", "3F", "F7", "CC", "34", "A5", "E5", "F1", "71", "D8", "31", "15" },
+      { "04", "C7", "23", "C3", "18", "96", "05", "9A", "07", "12", "80", "E2", "EB", "27", "B2", "75" },
+      { "09", "83", "2C", "1A", "1B", "6E", "5A", "A0", "52", "3B", "D6", "B3", "29", "E3", "2F", "84" },
+      { "53", "D1", "00", "ED", "20", "FC", "B1", "5B", "6A", "CB", "BE", "39", "4A", "4C", "58", "CF" },
+      { "D0", "EF", "AA", "FB", "43", "4D", "33", "85", "45", "F9", "02", "7F", "50", "3C", "9F", "A8" },
+      { "51", "A3", "40", "8F", "92", "9D", "38", "F5", "BC", "B6", "DA", "21", "10", "FF", "F3", "D2" },
+      { "CD", "0C", "13", "EC", "5F", "97", "44", "17", "C4", "A7", "7E", "3D", "64", "5D", "19", "73" },
+      { "60", "81", "4F", "DC", "22", "2A", "90", "88", "46", "EE", "B8", "14", "DE", "5E", "0B", "DB" },
+      { "E0", "32", "3A", "0A", "49", "06", "24", "5C", "C2", "D3", "AC", "62", "91", "95", "E4", "79" },
+      { "E7", "C8", "37", "6D", "8D", "D5", "4E", "A9", "6C", "56", "F4", "EA", "65", "7A", "AE", "08" },
+      { "BA", "78", "25", "2E", "1C", "A6", "B4", "C6", "E8", "DD", "74", "1F", "4B", "BD", "8B", "8A" },
+      { "70", "3E", "B5", "66", "48", "03", "F6", "0E", "61", "35", "57", "B9", "86", "C1", "1D", "9E" },
+      { "E1", "F8", "98", "11", "69", "D9", "8E", "94", "9B", "1E", "87", "E9", "CE", "55", "28", "DF" },
+      { "8C", "A1", "89", "0D", "BF", "E6", "42", "68", "41", "99", "2D", "0F", "B0", "54", "BB", "16" } };
 
   /**
    * R_CON static variable which is used for r-con transformations and used in
@@ -54,42 +36,25 @@ public class Aescipher {
    */
 
   private static final String[][] R_CON = {
-      { "8D", "01", "02", "04", "08", "10", "20", "40", "80", "1B", "36", "6C",
-          "D8", "AB", "4D", "9A" },
-      { "2F", "5E", "BC", "63", "C6", "97", "35", "6A", "D4", "B3", "7D", "FA",
-          "EF", "C5", "91", "39" },
-      { "72", "E4", "D3", "BD", "61", "C2", "9F", "25", "4A", "94", "33", "66",
-          "CC", "83", "1D", "3A" },
-      { "74", "E8", "CB", "8D", "01", "02", "04", "08", "10", "20", "40", "80",
-          "1B", "36", "6C", "D8" },
-      { "AB", "4D", "9A", "2F", "5E", "BC", "63", "C6", "97", "35", "6A", "D4",
-          "B3", "7D", "FA", "EF" },
-      { "C5", "91", "39", "72", "E4", "D3", "BD", "61", "C2", "9F", "25", "4A",
-          "94", "33", "66", "CC" },
-      { "83", "1D", "3A", "74", "E8", "CB", "8D", "01", "02", "04", "08", "10",
-          "20", "40", "80", "1B" },
-      { "36", "6C", "D8", "AB", "4D", "9A", "2F", "5E", "BC", "63", "C6", "97",
-          "35", "6A", "D4", "B3" },
-      { "7D", "FA", "EF", "C5", "91", "39", "72", "E4", "D3", "BD", "61", "C2",
-          "9F", "25", "4A", "94" },
-      { "33", "66", "CC", "83", "1D", "3A", "74", "E8", "CB", "8D", "01", "02",
-          "04", "08", "10", "20" },
-      { "40", "80", "1B", "36", "6C", "D8", "AB", "4D", "9A", "2F", "5E", "BC",
-          "63", "C6", "97", "35" },
-      { "6A", "D4", "B3", "7D", "FA", "EF", "C5", "91", "39", "72", "E4", "D3",
-          "BD", "61", "C2", "9F" },
-      { "25", "4A", "94", "33", "66", "CC", "83", "1D", "3A", "74", "E8", "CB",
-          "8D", "01", "02", "04" },
-      { "08", "10", "20", "40", "80", "1B", "36", "6C", "D8", "AB", "4D", "9A",
-          "2F", "5E", "BC", "63" },
-      { "C6", "97", "35", "6A", "D4", "B3", "7D", "FA", "EF", "C5", "91", "39",
-          "72", "E4", "D3", "BD" },
-      { "61", "C2", "9F", "25", "4A", "94", "33", "66", "CC", "83", "1D", "3A",
-          "74", "E8", "CB", "8D" } };
+      { "8D", "01", "02", "04", "08", "10", "20", "40", "80", "1B", "36", "6C", "D8", "AB", "4D", "9A" },
+      { "2F", "5E", "BC", "63", "C6", "97", "35", "6A", "D4", "B3", "7D", "FA", "EF", "C5", "91", "39" },
+      { "72", "E4", "D3", "BD", "61", "C2", "9F", "25", "4A", "94", "33", "66", "CC", "83", "1D", "3A" },
+      { "74", "E8", "CB", "8D", "01", "02", "04", "08", "10", "20", "40", "80", "1B", "36", "6C", "D8" },
+      { "AB", "4D", "9A", "2F", "5E", "BC", "63", "C6", "97", "35", "6A", "D4", "B3", "7D", "FA", "EF" },
+      { "C5", "91", "39", "72", "E4", "D3", "BD", "61", "C2", "9F", "25", "4A", "94", "33", "66", "CC" },
+      { "83", "1D", "3A", "74", "E8", "CB", "8D", "01", "02", "04", "08", "10", "20", "40", "80", "1B" },
+      { "36", "6C", "D8", "AB", "4D", "9A", "2F", "5E", "BC", "63", "C6", "97", "35", "6A", "D4", "B3" },
+      { "7D", "FA", "EF", "C5", "91", "39", "72", "E4", "D3", "BD", "61", "C2", "9F", "25", "4A", "94" },
+      { "33", "66", "CC", "83", "1D", "3A", "74", "E8", "CB", "8D", "01", "02", "04", "08", "10", "20" },
+      { "40", "80", "1B", "36", "6C", "D8", "AB", "4D", "9A", "2F", "5E", "BC", "63", "C6", "97", "35" },
+      { "6A", "D4", "B3", "7D", "FA", "EF", "C5", "91", "39", "72", "E4", "D3", "BD", "61", "C2", "9F" },
+      { "25", "4A", "94", "33", "66", "CC", "83", "1D", "3A", "74", "E8", "CB", "8D", "01", "02", "04" },
+      { "08", "10", "20", "40", "80", "1B", "36", "6C", "D8", "AB", "4D", "9A", "2F", "5E", "BC", "63" },
+      { "C6", "97", "35", "6A", "D4", "B3", "7D", "FA", "EF", "C5", "91", "39", "72", "E4", "D3", "BD" },
+      { "61", "C2", "9F", "25", "4A", "94", "33", "66", "CC", "83", "1D", "3A", "74", "E8", "CB", "8D" } };
 
-  static String[][] GaloisMatrix = { { "02", "03", "01", "01" },
-      { "01", "02", "03", "01" }, { "01", "01", "02", "03" },
-      { "03", "01", "01", "02" } };
+  static String[][] GaloisMatrix = { { "02", "03", "01", "01" }, { "01", "02", "03", "01" },
+      { "01", "01", "02", "03" }, { "03", "01", "01", "02" } };
   // masterKey array is declared to save the key user gives
   public static String[][] masterKey_encrypt;
   public static String[][] masterText_encrypt;
@@ -97,15 +62,14 @@ public class Aescipher {
   public static String[][] keyMatrixW_encrypt;
 
   /**
-   * This method accepts user given key and saves it into a 4*4 matrix. Once the
-   * input is processed generateWMatrix() method is called.
+   * This method accepts user given key and saves it into a 4*4 matrix. Once
+   * the input is processed generateWMatrix() method is called.
    * 
    * @param key
-   *          : Input key
+   *            : Input key
    */
-  public static void processInput(String plainText, String inputKey,
-      int[] size_basket) {
-
+  public static String processInput(String plainText, String inputKey, int[] size_basket) {
+    String cipherFinal = "";
     int i = 0;
     int j = 0;
     int col_valueforInput;
@@ -130,19 +94,20 @@ public class Aescipher {
         j = j + 2;
       }
     }
-    generateWMatrix(col_valueforInput, column_size, rounds);
-    // generateCipher(masterKey,masterText,column_size,row_size,rounds);
+    System.out.println("Text to be encrypted after padding is");
+    System.out.println(plainText);
+    cipherFinal = generateWMatrix(col_valueforInput, column_size, rounds);
+    return cipherFinal;
   }
 
-  public static void generateCipher(String[][] masterKey,
-      String[][] masterText, int column_size, int row_size, int rounds) {
+  public static String generateCipher(String[][] masterKey, String[][] masterText, int column_size, int row_size,
+      int rounds) {
 
     String[][] keyHex = new String[4][4];
+    StringBuilder outValue = new StringBuilder();
     int WCol = 0;
-
     int roundCounter = 0;
     while (WCol < column_size) {
-      // while (WCol < column_size) {
       for (int cols = 0; cols < 4; cols++, WCol++) {
         for (int row = 0; row < 4; row++) {
           keyHex[row][cols] = keyMatrixW_encrypt[row][WCol];
@@ -152,7 +117,8 @@ public class Aescipher {
       if (roundCounter != (rounds - 1)) {
         roundCounter++;
         masterText = aesStateXor(masterText, keyHex);
-        // Exclusive or output is passed to nibble substitution is called
+        // Exclusive or output is passed to nibble substitution is
+        // called
         masterText = aesNibbleSub(masterText);
         // Nibble substituted output is called to shiftrows method
         masterText = aesShiftRow(masterText);
@@ -165,23 +131,28 @@ public class Aescipher {
         // In the tenth round we do only plain xor
         masterText = aesStateXor(masterText, keyHex);
     }
-    System.out.println("The Cipher Text is");
+    // System.out.println("The Cipher Text is");
     for (int cols = 0; cols < 4; cols++) {
       for (int row = 0; row < 4; row++) {
-        System.out.print(masterText[row][cols]+ "\t");
+        outValue = outValue.append(masterText[row][cols]);
+        // System.out.print(masterText[row][cols]+ "\t");
       }
-      System.out.println();
+
     }
+    System.out.println();
+    // Aesdecipher.processInput(outValue, inputkey, size_basket);
+    return outValue.toString();
+
   }
 
   /**
    * generateWMatrix() method starts processing the keys for the 4*44 keys
    * matrix
    */
-  public static void generateWMatrix(int col_valueforInput, int column_size,
-      int rounds) { // Saving the user key in keyMatrixW by filling the first
-                    // 4*4 cells
+  public static String generateWMatrix(int col_valueforInput, int column_size, int rounds) { 
+    
     int roundCounter = 0;
+    String cipherW = "";
     for (int row = 0; row < 4; row = row + 1) {
       for (int column = 0; column < col_valueforInput; column++) {
         keyMatrixW_encrypt[row][column] = masterKey_encrypt[row][column];
@@ -193,8 +164,8 @@ public class Aescipher {
     String[][] wNewMatrix = null;
     for (int column = col_valueforInput; column < column_size; column++) {
       /**
-       * if the column number is not a multiple of 4 the following steps are to
-       * be implemented
+       * if the column number is not a multiple of 4 the following steps
+       * are to be implemented
        */
 
       if (column % col_valueforInput != 0 && col_valueforInput == 8) {
@@ -202,8 +173,7 @@ public class Aescipher {
           for (int row = 0; row < 4; row++) {
             keyMatrixW_encrypt[row][column] = aesSbox(keyMatrixW_encrypt[row][column - 1]);
             keyMatrixW_encrypt[row][column] = exclusiveOr(
-                keyMatrixW_encrypt[row][column - col_valueforInput],
-                keyMatrixW_encrypt[row][column]);
+                keyMatrixW_encrypt[row][column - col_valueforInput], keyMatrixW_encrypt[row][column]);
 
           }
         } else {
@@ -217,16 +187,17 @@ public class Aescipher {
       } else if (column % col_valueforInput != 0 && col_valueforInput != 8) {
         for (int row = 0; row < 4; row++) {
 
-          keyMatrixW_encrypt[row][column] = exclusiveOr(
-              keyMatrixW_encrypt[row][column - col_valueforInput],
+          keyMatrixW_encrypt[row][column] = exclusiveOr(keyMatrixW_encrypt[row][column - col_valueforInput],
               keyMatrixW_encrypt[row][column - 1]);
         }
 
       } else if (column % col_valueforInput == 0) {
 
-        // If its a multiple of 4 the following steps will be implemented
+        // If its a multiple of 4 the following steps will be
+        // implemented
         wNewMatrix = new String[1][4];
-        // Inserting values and shifting cells in the intermediate matrix
+        // Inserting values and shifting cells in the intermediate
+        // matrix
         wNewMatrix[0][0] = keyMatrixW_encrypt[1][column - 1];
         wNewMatrix[0][1] = keyMatrixW_encrypt[2][column - 1];
         wNewMatrix[0][2] = keyMatrixW_encrypt[3][column - 1];
@@ -242,25 +213,24 @@ public class Aescipher {
         wNewMatrix[0][0] = exclusiveOr(aesRcon(r), wNewMatrix[0][0]);
         // Final computation of recursively XOR the values
         for (int row = 0; row < 4; row++) {
-          keyMatrixW_encrypt[row][column] = exclusiveOr(
-              keyMatrixW_encrypt[row][column - col_valueforInput],
+          keyMatrixW_encrypt[row][column] = exclusiveOr(keyMatrixW_encrypt[row][column - col_valueforInput],
               wNewMatrix[0][row]);
         }
       }
     }
-    generateCipher(masterKey_encrypt, masterText_encrypt, column_size,
-        col_valueforInput, rounds);
+    cipherW = generateCipher(masterKey_encrypt, masterText_encrypt, column_size, col_valueforInput, rounds);
+    return cipherW;
   }
 
   /**
    * This method takes two input strings which are hexadecimal values and
-   * convert them into decimal and performe exclusive OR. Saves and returns the
-   * result back.
+   * convert them into decimal and performe exclusive OR. Saves and returns
+   * the result back.
    * 
    * @param val1
-   *          : Inputs to be XORed
+   *            : Inputs to be XORed
    * @param val2
-   *          : Inputs to be XORed
+   *            : Inputs to be XORed
    * @return : Returns hexadecimal string after exclusive OR operation
    */
   private static String exclusiveOr(String val1, String val2) {
@@ -272,12 +242,12 @@ public class Aescipher {
   }
 
   /**
-   * This method takes a hexadecimal value as the input, splits it and converts
-   * into decimal. Based on the two integers generated we map the S_BOX matrix
-   * and find the respective value and return it back.
+   * This method takes a hexadecimal value as the input, splits it and
+   * converts into decimal. Based on the two integers generated we map the
+   * S_BOX matrix and find the respective value and return it back.
    * 
    * @param sBoxInput
-   *          : String which is split and used as index on s_box
+   *            : String which is split and used as index on s_box
    * @return : Returns the value from s-box matrix
    */
   private static String aesSbox(String sBoxInput) {
@@ -293,7 +263,7 @@ public class Aescipher {
    * R_CON matrix.
    * 
    * @param rConInput
-   *          : Index to lookup R_CON matrix
+   *            : Index to lookup R_CON matrix
    * @return : Value from the R_CON matrix
    */
   private static String aesRcon(int rConInput) {
@@ -309,13 +279,14 @@ public class Aescipher {
         exclusiveOrArray[i][j] = exclusiveOr(sHex[i][j], keyHex[i][j]);
       }
     }
-    
+
     return exclusiveOrArray;
 
   }
 
   /**
-   * Accepts Exclusiveor output and finds the respective element in S_BOX matrix
+   * Accepts Exclusiveor output and finds the respective element in S_BOX
+   * matrix
    * 
    * @param exclusive
    * @return
@@ -362,7 +333,8 @@ public class Aescipher {
         for (int k = 0; k < 4; k++) {
 
           switch (GaloisMatrix[i][k]) {
-          // checks data from galios matrix and verifies data to perform
+          // checks data from galios matrix and verifies data to
+          // perform
           // multiplication
           case "01":
             sum = exclusiveOr(sum, inStateHex[k][j]);
@@ -385,8 +357,8 @@ public class Aescipher {
   }
 
   /**
-   * In this function , mix columns fexclyoperations having multiplication with
-   * 3 are considered here and operation is performed.
+   * In this function , mix columns operations having multiplication
+   * with 3 are considered here and operation is performed.
    * 
    * @param InputHex
    * @return
@@ -396,9 +368,9 @@ public class Aescipher {
   }
 
   /**
-   * In Mix columns operation if the element is to be multiplied with 2, we will
-   * use this function to perform the operation of checking most significant bit
-   * shifting the bits
+   * In Mix columns operation if the element is to be multiplied with 2, we
+   * will use this function to perform the operation of checking most
+   * significant bit shifting the bits
    * 
    * @param InputHex
    * @return
@@ -413,8 +385,7 @@ public class Aescipher {
     }
     String Input = pads.concat(InputHex);
     String oneB = Integer.toHexString(27);
-    String shiftedBinary = Integer
-        .toBinaryString(Integer.parseInt(Input, 2) << 1);
+    String shiftedBinary = Integer.toBinaryString(Integer.parseInt(Input, 2) << 1);
     if (shiftedBinary.length() > 8) {
       shiftedBinary = shiftedBinary.substring(1);
     }

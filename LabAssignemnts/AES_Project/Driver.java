@@ -2,9 +2,9 @@ import java.util.Scanner;
 
 /**
  * This class takes the user input key and calls aescipher class for processing
- * the keys.
+ * the keys.If the input is less than 32 bits, then it pads and processes
  * 
- * @author siddhartha
+ * @author Surya Valluri,Sri Immadisetty
  *
  */
 
@@ -18,15 +18,20 @@ public class Driver {
     inputkey = inputkey.trim();
     if (sc.hasNextLine())
       plainText = sc.nextLine();
-    int length = inputkey.length();
     inputkey = inputkey.toLowerCase();
     plainText = plainText.toLowerCase();
     int row_size = 0;
     int column_size = 0;
     int rounds = 0;
-    int inputLength = inputkey.length();
+    int inputLength = plainText.length();
+    int padLength = 32 - plainText.length();
+    String padString = Integer.toString(padLength);
+    if (padLength < 10)
+      padString = "0".concat(padString);
     int[] size_basket = new int[4];
-
+    /**
+     * Assigning values based on input key size
+     */
     if (inputkey.length() == 32) {
       row_size = 4;
       column_size = 44;
@@ -45,10 +50,44 @@ public class Driver {
     size_basket[0] = row_size;
     size_basket[1] = column_size;
     size_basket[2] = rounds;
+    /**
+     * Based on input message size padding is decided
+     */
+    try {
+      if (plainText.length() == 32 && plainText.substring(30, 32) == "00") {
+        String cipher = Aescipher
+            .processInput(plainText, inputkey, size_basket);
+        System.out.println("Encrypted message is");
+        System.out.println(cipher);
 
-//     Aescipher.processInput(plainText,inputkey, size_basket);
-    Aesdecipher.processInput(plainText, inputkey, size_basket);
+      } else if (plainText.length() <= 30) {
+
+        for (int i = 0; i < padLength / 2; i++) {
+          plainText = plainText.concat(padString);
+
+        }
+
+      }
+
+      
+      
+      String cipher = Aescipher.processInput(plainText, inputkey, size_basket);
+      System.out.println("Encrypted message is");
+      System.out.println(cipher);
+
+      String decipher = Aesdecipher.processInput(cipher, inputkey, size_basket);
+
+      if (padLength > 0) {
+        System.out.println("Number of bits to be padded are ");
+        System.out.println(padLength);
+        decipher = decipher.substring(0, inputLength);
+      }
+
+      System.out.println("Decrypted message is");
+      System.out.println(decipher);
+    } catch (Exception se) {
+      se.printStackTrace();
+    }
 
   }
-
 }
